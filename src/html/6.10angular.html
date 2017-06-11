@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .aa {
+            background: lightpink;
+        }
+    </style>
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body ng-app="myapp">
+    <input type="text" name="" value="" ng-model="name">
+    <div>{{1+3}}</div>
+    <ul ng-init="datas=[{name:1},{name:2}]">
+        <li ng-repeat="i in datas" ng-click="fn(i)" ng-if="$index==1">
+            {{i.name}}
+        </li>
+    </ul>
+    <ul>
+        <li ng-class="{aa:state==1}" ng-click="fnn(1)">1</li>
+        <li ng-class="{aa:state==2}" ng-click="fnn(2)">2</li>
+        <li ng-class="{aa:state==3}" ng-click="fnn(3)">3</li>
+    </ul>
+    <p ng-class="{aa:false}">
+        sfs
+    </p>
+    <p ng-show="false">显示与隐藏</p>
+    <p ng-bind="name"></p>
+    <script src="../js/common/angular.js"></script>
+    <script src="../js/common/jquery.js"></script>
+    <script>
+        var app = angular.module("myapp", [])
+        app.run(function($rootScope, $interval) {
+            $rootScope.name = "2"
+            $rootScope.data = [{
+                    name: "zhangsan"
+                }, {
+                    name: "lisi"
+                }]
+                // $interval(function() {
+                //     $rootScope.name++
+                //         console.log($rootScope.name)
+                // }, 2000)
+            $rootScope.fn = function(i) {
+                console.log(i.name)
+                i.name = "zhenhao"
+            }
+            $rootScope.state = 1
+            $rootScope.fnn = function(i) {
+                $rootScope.state = i
+            }
+        })
+    </script>
+
+</body>
+
+</html>
