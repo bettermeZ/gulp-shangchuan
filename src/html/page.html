@@ -1,0 +1,107 @@
+ <!DOCTYPE html>
+ <html>
+ <head>
+   <meta charset="utf-8">
+   <title></title>
+   <script type="text/javascript" src="angular.js"></script>
+ </head>
+ <style>
+  *{
+    margin:0;
+    padding:0;
+    list-style:none;
+    text-decoration:none;
+  }
+  ul{
+    width:100%;
+  }
+  ul li{
+    float:left;
+    margin:10px 10px;
+  }
+  ul li a{
+    display:inline-block;
+    width:40px;
+    height:40px;
+    border:1px solid gray;
+    line-height:40px;
+    text-align:center;
+    color:gray;
+  }
+ </style>
+ <body ng-app="myApp" ng-controller="myController">
+   <nav aria-label="Page navigation" class="clearfix">
+     <ul class="pagination pagination-sm pagination1 fr" style="margin: 0">
+       <li ng-class="{disabled:page==1}">
+         <a href="javascript:void(0)" aria-label="Previous" ng-click="sub(page-1<1?1:page-1)" ng-disabled="page==1">
+           <span aria-hidden="true">&laquo;</span>
+         </a>
+       </li>
+       <li ng-if="page >= pageNum && lastPage !== pageNum" ng-click="sub(1)" ng-class="{active:item==1}">
+         <a href="javascript:void(0)">1</a>
+       </li>
+       <li ng-if="page >= pageNum && lastPage !== pageNum">
+         <a href="javascript:void(0)">...</a>
+       </li>
+       <li ng-click="sub(item)" ng-class="{active:item==page}" ng-repeat="item in pages">
+         <a href="javascript:void(0)">{{item}}</a>
+       </li>
+       <li ng-if="lastPage > pageNum && firstPage <= lastPage - pageNum">
+         <a href="javascript:void(0)">...</a>
+       </li>
+       <li ng-if="lastPage > pageNum && firstPage <= lastPage - pageNum" ng-click="sub(lastPage)" ng-class="{active:item==page}">
+         <a href="javascript:void(0)">{{lastPage}}</a>
+       </li>
+       <li ng-class="{disabled:page==lastPage}">
+         <a href="javascript:void(0)" aria-label="Next" ng-click="sub(page+1>lastPage?page:page+1)">
+           <span aria-hidden="true">&raquo;</span>
+         </a>
+       </li>
+     </ul>
+   </nav>
+ </body>
+ <script type="text/javascript">
+   var app = angular.module('myApp', []);
+   function setPage(length, amount, num, first) {//创建保存页码数组的函数
+     //length数据总条数
+     //amount每页数据条数
+     //num保留的页码数
+     //first第一页的页码
+     var pages = []; //创建分页数组
+     var page = Math.ceil(length / amount);
+     if (page <= num) {
+       for (var i = 1; i <= page; i++) {
+         pages.push(i);
+       }
+     }
+     if (page > num) {
+       for (var i = first; i < first + num; i++) {
+         pages.push(i);
+       }
+     }
+     return pages;
+   }
+   app.controller('myController', function($scope) {
+     $scope.firstPage = 1;
+     $scope.pageNum = 5;
+     $scope.page = 1;
+     var amount = 100;//数据总条数
+     var each = 6;//每页显示的条数
+     $scope.sub = function(page) {
+         $scope.lastPage = Math.ceil(amount / each);
+         if (page >= $scope.pageNum) {
+           $scope.firstPage = page - Math.floor($scope.pageNum / 2);
+         } else {
+           $scope.firstPage = 1;
+         }
+         if ($scope.firstPage > $scope.lastPage - $scope.pageNum) {
+           $scope.firstPage = $scope.lastPage - $scope.pageNum + 1;
+         }
+         $scope.pages = setPage(amount, each, $scope.pageNum, $scope.firstPage);
+         $scope.page = page;
+     }
+     $scope.sub(1);
+   });
+
+</script>
+</html>
